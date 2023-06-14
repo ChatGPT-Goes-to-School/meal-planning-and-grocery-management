@@ -18,6 +18,8 @@ This repository contains the source code for the Meal Planning and Grocery Manag
 
 - **Backend:** The backend is built using Golang with the Gin framework, providing a robust and efficient foundation for the application.
 
+- **Database:** The database will employ MySQL that is hosted in AWS RDS.
+
 - **External APIs:** The application integrates with various third-party APIs for recipe data, ingredient information, and nutritional data. These APIs provide a rich source of data to enhance the user experience.
 
 ## Getting Started
@@ -27,10 +29,10 @@ To set up the application locally, follow these steps:
 1. Clone the repository: `git clone https://github.com/your-username/meal-planning-grocery-management.git`
 
 2. Install the necessary dependencies for the backend by running:
-  ```go mod download```
+   `go mod download`
 
 3. Start the development server using:
-  ```go run main.go```
+   `go run main.go`
 
 4. Access the application in your web browser at `http://localhost:8080`.
 
