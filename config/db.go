@@ -26,7 +26,7 @@ func ConnectDB() (*gorm.DB, error) {
 	db, err := gorm.Open(mysql.Open(dbConnStr), &gorm.Config{})
 
 	// Migrate the database
-	db.AutoMigrate(&models.MealPlan{}, &models.Meal{})
+	db.AutoMigrate(&models.Meal{}, &models.MealPlan{}, )
 
 	if err != nil {
 		return nil, err

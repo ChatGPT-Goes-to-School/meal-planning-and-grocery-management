@@ -1,8 +1,15 @@
 package models
 
+import (
+	"gorm.io/gorm"
+)
+
+
 type Meal struct {
-	ID           int      `json:"id"`
-	Name         string   `json:"name"`
-	Ingredients  []string `json:"ingredients"`
-	Instructions string   `json:"instructions"`
+	gorm.Model
+	ID          uint      `gorm:"primaryKey"`
+	Name        string    `gorm:"column:name"`
+	Ingredients string  `gorm:"column:ingredients"`
+	Instructions string   `gorm:"column:instructions"`
+	MealPlanID  uint       `gorm:"column:meal_plan_id"` // Foreign key referencing MealPlan's primary key
 }
