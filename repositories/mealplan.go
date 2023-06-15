@@ -71,3 +71,4 @@ func (r *MealPlanRepository) DeleteMealPlan(id int) error {
     }
     return nil
 }
+
