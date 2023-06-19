@@ -38,6 +38,7 @@ func main() {
 
 	// Register the API endpoints
 	routes.SetupMealPlanRoutes(router, db)
+	routes.SetupGroceryRoutes(router, db)
 
 	// Run the server
 	router.Run(":8080")

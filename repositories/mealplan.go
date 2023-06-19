@@ -22,8 +22,6 @@ func NewMealPlanRepository(db *gorm.DB) *MealPlanRepository {
 
 // CreateMealPlan creates a new meal plan in the repository
 func (r *MealPlanRepository) CreateMealPlan(mealPlan models.MealPlan) (models.MealPlan, error) {
-	fmt.Println("Creating meal plan", mealPlan)
-	fmt.Println("db", r.db)
 	err := r.db.Create(&mealPlan).Error
 	if err != nil {
 		fmt.Println("Failed to create meal plan:", err)
