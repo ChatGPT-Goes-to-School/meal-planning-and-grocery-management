@@ -9,5 +9,5 @@ type MealPlan struct {
 	Name     string   `json:"name"`
 	Description string `json:"description"`
 	Duration int      `json:"duration"`
-	Meals    []Meal `json:"meals"`
+	Meals    []int `json:"meals"`
 }
