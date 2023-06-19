@@ -18,13 +18,16 @@ func ConnectDB() (*gorm.DB, error) {
 	dbName := os.Getenv("DB_NAME")
 
 	// Create the database connection string
-	dbConnStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbName)
-	
+	dbConnStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", username, password, host, port, dbName)
+
 	// Set up the MySQL database connection string
 	db, err := gorm.Open(mysql.Open(dbConnStr), &gorm.Config{})
 
 	// Migrate the database
-	db.AutoMigrate(&models.MealPlan{}, )
+	db.AutoMigrate(&models.Grocery{},
+		&models.Ingredient{},
+		&models.ListItem{},
+		&models.MealPlan{})
 
 	if err != nil {
 		return nil, err

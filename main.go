@@ -15,16 +15,16 @@ func main() {
 	if err != nil {
 		fmt.Println("Error loading .env file:", err)
 	}
-	
+
 	db, err := config.ConnectDB()
-	
+
 	if err != nil {
 		fmt.Println("Failed to connect to the database:", err)
 		return
 	}
 
 	sqlDB, err := db.DB()
-	
+
 	if err != nil {
 		fmt.Println("Failed to connect to the database:", err)
 		return
@@ -33,12 +33,11 @@ func main() {
 	// Close
 	defer sqlDB.Close()
 
-    // Initialize the Gin router
+	// Initialize the Gin router
 	router := gin.Default()
 
-
 	// Register the API endpoints
-	routes.SetupRoutes(router)
+	routes.SetupMealPlanRoutes(router, db)
 
 	// Run the server
 	router.Run(":8080")
