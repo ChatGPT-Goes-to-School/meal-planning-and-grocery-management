@@ -84,7 +84,7 @@ For a more detailed understanding of the cloud architecture, including specific 
 
 ## Documentation
 
-For detailed documentation on the API endpoints and usage, refer to the [API Documentation](api-docs.md) file.
+For detailed documentation on the API endpoints and usage, refer to the Swagger documentation by accessing this url `http://localhost:8080/swagger/index.html` file.
 
 ## License
 
