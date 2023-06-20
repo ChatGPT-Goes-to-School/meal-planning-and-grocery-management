@@ -10,10 +10,10 @@ func SetupMealPlanRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	mealPlanHandler := handlers.NewMealPlanHandler(db)
 
 	// Initialize the handlers
-	router.POST("/meal-plans", mealPlanHandler.CreateMealPlan)
-	router.GET("/meal-plans/username/:username", mealPlanHandler.GetMealPlanByUsername)
-	router.GET("/meal-plans/:id", mealPlanHandler.GetMealPlan)
-	router.PUT("/meal-plans/:id", mealPlanHandler.UpdateMealPlan)
-	router.DELETE("/meal-plans/:id", mealPlanHandler.DeleteMealPlan)
+	router.POST("", mealPlanHandler.CreateMealPlan)
+	router.GET("username/:username", mealPlanHandler.GetMealPlanByUsername)
+	router.GET(":id", mealPlanHandler.GetMealPlan)
+	router.PUT(":id", mealPlanHandler.UpdateMealPlan)
+	router.DELETE(":id", mealPlanHandler.DeleteMealPlan)
 	// Define more routes as needed
 }

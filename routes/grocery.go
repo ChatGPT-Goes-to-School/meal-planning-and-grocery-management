@@ -9,10 +9,10 @@ import (
 func SetupGroceryRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	groceryHandler := handlers.NewGroceryHandler(db)
 	// Initialize the handlers
-	router.GET("/groceries/:id", groceryHandler.GetGrocery)
-	router.GET("/groceries/username/:username", groceryHandler.GetGroceriesByUsername)
-	router.POST("/groceries", groceryHandler.CreateGrocery)
-	router.PUT("/groceries/:id", groceryHandler.UpdateGrocery)
-	router.DELETE("/groceries/:id", groceryHandler.DeleteGrocery)
+	router.GET(":id", groceryHandler.GetGrocery)
+	router.GET("username/:username", groceryHandler.GetGroceriesByUsername)
+	router.POST("", groceryHandler.CreateGrocery)
+	router.PUT(":id", groceryHandler.UpdateGrocery)
+	router.DELETE(":id", groceryHandler.DeleteGrocery)
 	// Define more routes as needed
 }
