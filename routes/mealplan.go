@@ -6,8 +6,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func SetupMealPlanRoutes(router *gin.Engine, db *gorm.DB) {
+func SetupMealPlanRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	mealPlanHandler := handlers.NewMealPlanHandler(db)
+
 	// Initialize the handlers
 	router.POST("/meal-plans", mealPlanHandler.CreateMealPlan)
 	router.GET("/meal-plans/username/:username", mealPlanHandler.GetMealPlanByUsername)

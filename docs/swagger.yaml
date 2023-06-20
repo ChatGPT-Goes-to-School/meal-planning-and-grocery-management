@@ -1,0 +1,385 @@
+definitions:
+  gin.H:
+    additionalProperties: {}
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  httputil.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  models.Grocery:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/models.ListItem'
+        type: array
+      name:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Ingredient:
+    properties:
+      category:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  models.ListItem:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      grocery:
+        $ref: '#/definitions/models.Grocery'
+      groceryID:
+        type: integer
+      id:
+        type: integer
+      ingredient:
+        $ref: '#/definitions/models.Ingredient'
+      ingredientID:
+        type: integer
+      quantity:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  models.MealPlan:
+    properties:
+      createdAt:
+        description: Specify the column type
+        type: string
+      deletedAt:
+        description: Give a index name `deleted_at`
+        type: string
+      description:
+        type: string
+      duration:
+        type: integer
+      id:
+        type: integer
+      meals:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /groceries:
+    post:
+      consumes:
+      - application/json
+      description: Create a new grocery item
+      parameters:
+      - description: Grocery item object
+        in: body
+        name: grocery
+        required: true
+        schema:
+          $ref: '#/definitions/models.Grocery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Grocery'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Create a grocery item
+      tags:
+      - groceries
+  /groceries/{id}:
+    delete:
+      description: Delete a grocery item by ID
+      parameters:
+      - description: Grocery item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Delete a grocery item
+      tags:
+      - groceries
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a grocery item by ID
+      parameters:
+      - description: Grocery item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Grocery'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Get a grocery item
+      tags:
+      - groceries
+    put:
+      consumes:
+      - application/json
+      description: Update a grocery item by ID
+      parameters:
+      - description: Grocery item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Grocery item object
+        in: body
+        name: grocery
+        required: true
+        schema:
+          $ref: '#/definitions/models.Grocery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Grocery'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Update a grocery item
+      tags:
+      - groceries
+  /groceries/username/{username}:
+    get:
+      description: Retrieves the groceries associated with a specific username
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Grocery'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Retrieve groceries by username
+      tags:
+      - groceries
+  /meal-plans:
+    post:
+      consumes:
+      - application/json
+      description: Create a new meal plan
+      parameters:
+      - description: Meal plan object
+        in: body
+        name: mealPlan
+        required: true
+        schema:
+          $ref: '#/definitions/models.MealPlan'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.MealPlan'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Create a meal plan
+      tags:
+      - meal-plans
+  /meal-plans/{id}:
+    delete:
+      description: Delete an existing meal plan by its ID
+      parameters:
+      - description: ID of the meal plan to delete
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Delete a meal plan
+      tags:
+      - meal-plans
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a meal plan by its ID
+      parameters:
+      - description: Meal plan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MealPlan'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Get a meal plan by ID
+      tags:
+      - meal-plans
+    put:
+      consumes:
+      - application/json
+      description: Update an existing meal plan by its ID
+      parameters:
+      - description: ID of the meal plan to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated meal plan object
+        in: body
+        name: updatedMealPlan
+        required: true
+        schema:
+          $ref: '#/definitions/models.MealPlan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MealPlan'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Update a meal plan
+      tags:
+      - meal-plans
+  /meal-plans/username/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a meal plan by the username of the owner
+      parameters:
+      - description: Username of the meal plan owner
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MealPlan'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Get a meal plan by username
+      tags:
+      - meal-plans
+swagger: "2.0"

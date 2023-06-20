@@ -4,12 +4,22 @@ import (
 	"fmt"
 
 	"github.com/ChatGPT-Goes-to-School/meal-planning-and-grocery-management/config"
+	"github.com/ChatGPT-Goes-to-School/meal-planning-and-grocery-management/docs"
 	"github.com/ChatGPT-Goes-to-School/meal-planning-and-grocery-management/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
+	docs.SwaggerInfo.Title = "Meal Planning and Grocery Management API"
+	docs.SwaggerInfo.Description = "An API for managing meal plans and grocery lists."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:8080"
+	docs.SwaggerInfo.BasePath = "/api"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
 	// Load the .env file
 	err := godotenv.Load()
 	if err != nil {
@@ -37,8 +47,18 @@ func main() {
 	router := gin.Default()
 
 	// Register the API endpoints
-	routes.SetupMealPlanRoutes(router, db)
-	routes.SetupGroceryRoutes(router, db)
+	apiRoutes := router.Group(docs.SwaggerInfo.BasePath)
+	{
+		mealPlan := apiRoutes.Group("/meal-plans")
+		{
+			routes.SetupMealPlanRoutes(mealPlan, db)
+		}
+		grocery := apiRoutes.Group("/groceries")
+		{
+			routes.SetupGroceryRoutes(grocery, db)
+		}
+	}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Run the server
 	router.Run(":8080")
