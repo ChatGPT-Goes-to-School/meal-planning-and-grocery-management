@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 
+	"os"
+
 	"github.com/ChatGPT-Goes-to-School/meal-planning-and-grocery-management/config"
 	"github.com/ChatGPT-Goes-to-School/meal-planning-and-grocery-management/docs"
+	"github.com/ChatGPT-Goes-to-School/meal-planning-and-grocery-management/middlewares"
 	"github.com/ChatGPT-Goes-to-School/meal-planning-and-grocery-management/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -46,6 +49,8 @@ func main() {
 	// Initialize the Gin router
 	router := gin.Default()
 
+	// Apply the JWT middleware to routes that require authentication
+	router.Use(middlewares.JWTMiddleware(os.Getenv("JWT_SECRET")))
 	// Register the API endpoints
 	apiRoutes := router.Group(docs.SwaggerInfo.BasePath)
 	{
