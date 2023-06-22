@@ -7,25 +7,24 @@ import (
 )
 
 type IngredientService struct {
-	ingredientRepository repositories.IngredientRepository
-	listItemRepository   repositories.ListItemRepository
-	groceryRepository    repositories.GroceryRepository
+	ingredientRepository *repositories.IngredientRepository
+	listItemRepository   *repositories.ListItemRepository
+	groceryRepository    *repositories.GroceryRepository
 }
 
-func NewIngredientService(db *gorm.DB) *GroceryService {
+func NewIngredientService(db *gorm.DB) *IngredientService {
 	ingredientRepository := repositories.NewIngredientRepository(db)
 	listItemRepository := repositories.NewListItemRepository(db)
 	groceryRepository := repositories.NewGroceryRepository(db)
 
-	return &GroceryService{
+	return &IngredientService{
 		ingredientRepository: ingredientRepository,
 		listItemRepository:   listItemRepository,
 		groceryRepository:    groceryRepository,
 	}
 }
 
-func (s *GroceryService) AddIngredientToGrocery(groceryID int, ingredient []models.Ingredient) error {
-
+func (s *IngredientService) AddIngredientToGrocery(groceryID int, ingredient []models.Ingredient) error {
 	// Create the ingredient in the database
 	for _, ingredient := range ingredient {
 		id, err := s.ingredientRepository.CreateIngredient(&ingredient)
@@ -50,6 +49,39 @@ func (s *GroceryService) AddIngredientToGrocery(groceryID int, ingredient []mode
 		if err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (s *IngredientService) RemoveIngredientFromGrocery(groceryID, ingredientID int) error {
+	res, err := s.listItemRepository.GetListItemByGroceryIDAndIngredientID(uint(groceryID), uint(ingredientID))
+	if err != nil {
+		return err
+	}
+
+	err2 := s.listItemRepository.DeleteListItem(int(res.ID))
+	if err2 != nil {
+		// Handle any repository errors
+		return err2
+	}
+
+	err3 := s.ingredientRepository.DeleteIngredient(ingredientID)
+	if err3 != nil {
+		// Handle any repository errors
+		return err3
+	}
+
+	return nil
+}
+
+func (s *IngredientService) UpdateIngredientQuantity(ingredient models.Ingredient) error {
+	// Convert groceryID and ingredientID to appropriate data types if needed
+
+	err := s.ingredientRepository.UpdateIngredient(&ingredient)
+	if err != nil {
+		// Handle any repository errors
+		return err
 	}
 
 	return nil

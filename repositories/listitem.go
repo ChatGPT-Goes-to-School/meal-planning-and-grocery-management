@@ -50,3 +50,13 @@ func (r *ListItemRepository) GetListItemsByGroceryID(groceryID uint) ([]models.L
 
 	return listItems, nil
 }
+
+func (r *ListItemRepository) GetListItemByGroceryIDAndIngredientID(groceryID uint, ingredientID uint) (*models.ListItem, error) {
+	var listItem models.ListItem
+	res := r.db.Where("grocery_id = ? AND ingredient_id = ?", groceryID, ingredientID).First(&listItem)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return &listItem, nil
+}
