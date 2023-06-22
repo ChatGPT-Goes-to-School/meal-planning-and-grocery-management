@@ -18,8 +18,9 @@ func NewIngredientRepository(db *gorm.DB) *IngredientRepository {
 }
 
 // CreateIngredient creates a new ingredient record in the database.
-func (r *IngredientRepository) CreateIngredient(ingredient *models.Ingredient) error {
-	return r.db.Create(ingredient).Error
+func (r *IngredientRepository) CreateIngredient(ingredient *models.Ingredient) (uint, error) {
+	item := r.db.Create(ingredient)
+	return ingredient.ID, item.Error
 }
 
 // GetIngredientByID retrieves an ingredient record from the database by its ID.
