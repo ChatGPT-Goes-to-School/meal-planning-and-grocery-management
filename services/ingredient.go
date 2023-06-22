@@ -75,13 +75,18 @@ func (s *IngredientService) RemoveIngredientFromGrocery(groceryID, ingredientID 
 	return nil
 }
 
-func (s *IngredientService) UpdateIngredientQuantity(ingredient models.Ingredient) error {
+func (s *IngredientService) UpdateIngredientQuantity(ingredient models.Ingredient, id int) error {
 	// Convert groceryID and ingredientID to appropriate data types if needed
-
-	err := s.ingredientRepository.UpdateIngredient(&ingredient)
+	res, err := s.ingredientRepository.GetIngredientByID(id)
 	if err != nil {
-		// Handle any repository errors
 		return err
+	}
+
+	res.Quantity = ingredient.Quantity
+	err2 := s.ingredientRepository.UpdateIngredient(&ingredient)
+	if err2 != nil {
+		// Handle any repository errors
+		return err2
 	}
 
 	return nil

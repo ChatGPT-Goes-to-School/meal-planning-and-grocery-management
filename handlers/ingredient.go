@@ -32,7 +32,7 @@ func NewIngredientHandler(db *gorm.DB) *IngredientHandler {
 // @Success 201 {object} string "OK"
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /grocery/{id}/ingredient [post]
+// @Router /grocery/ingredient/{id} [post]
 func (h *IngredientHandler) AddIngredientToGrocery(c *gin.Context) {
 	// Get grocery ID from request parameters
 	groceryID, err := utils.ConvertParamToInt(c.Param("id"))
@@ -68,7 +68,7 @@ func (h *IngredientHandler) AddIngredientToGrocery(c *gin.Context) {
 // @Param ingredientID path int true "Ingredient ID"
 // @Success 200 {object} string "OK"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /grocery/{groceryID}/ingredient/{ingredientID} [delete]
+// @Router /grocery/ingredient/{groceryID}/{ingredientID} [delete]
 func (h *IngredientHandler) RemoveIngredientFromGrocery(c *gin.Context) {
 	groceryID, err := utils.ConvertParamToInt(c.Param("groceryID"))
 	if err != nil {
@@ -101,8 +101,14 @@ func (h *IngredientHandler) RemoveIngredientFromGrocery(c *gin.Context) {
 // @Success 200 {object} string "OK"
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /grocery/ingredient [put]
+// @Router /grocery/ingredient/{ingredientID} [put]
 func (h *IngredientHandler) UpdateIngredientQuantity(c *gin.Context) {
+	id, err := utils.ConvertParamToInt(c.Param("ingredientID"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	var ingredient models.Ingredient
 
 	if err := c.ShouldBindJSON(&ingredient); err != nil {
@@ -110,9 +116,9 @@ func (h *IngredientHandler) UpdateIngredientQuantity(c *gin.Context) {
 		return
 	}
 
-	err := h.service.UpdateIngredientQuantity(ingredient)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	err2 := h.service.UpdateIngredientQuantity(ingredient, id)
+	if err2 != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err2.Error()})
 		return
 	}
 
