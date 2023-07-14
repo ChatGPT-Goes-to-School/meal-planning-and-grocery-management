@@ -17,7 +17,7 @@ COPY . .
 RUN go build -o main .
 
 # Expose the port that the application listens on
-EXPOSE 8080
+EXPOSE 8081
 
 # Set the entry point for the container
 CMD ["./main"]
