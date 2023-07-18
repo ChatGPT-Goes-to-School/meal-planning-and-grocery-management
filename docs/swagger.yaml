@@ -75,19 +75,15 @@ definitions:
         $ref: '#/definitions/models.Ingredient'
       ingredientID:
         type: integer
-      quantity:
-        type: integer
       updatedAt:
         type: string
     type: object
   models.MealPlan:
     properties:
       createdAt:
-        description: Specify the column type
         type: string
       deletedAt:
-        description: Give a index name `deleted_at`
-        type: string
+        $ref: '#/definitions/gorm.DeletedAt'
       description:
         type: string
       duration:
@@ -246,6 +242,103 @@ paths:
       summary: Retrieve groceries by username
       tags:
       - groceries
+  /grocery/ingredient/{groceryID}/{ingredientID}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove ingredient from a grocery by grocery ID and ingredient ID
+      parameters:
+      - description: Grocery ID
+        in: path
+        name: groceryID
+        required: true
+        type: integer
+      - description: Ingredient ID
+        in: path
+        name: ingredientID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Remove ingredient from grocery
+      tags:
+      - Grocery
+  /grocery/ingredient/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Add ingredient to a grocery by ID
+      parameters:
+      - description: Grocery ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Ingredient object
+        in: body
+        name: ingredient
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.Ingredient'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add ingredient to grocery
+      tags:
+      - Grocery
+  /grocery/ingredient/{ingredientID}:
+    put:
+      consumes:
+      - application/json
+      description: Update the quantity of an ingredient
+      parameters:
+      - description: Ingredient object
+        in: body
+        name: ingredient
+        required: true
+        schema:
+          $ref: '#/definitions/models.Ingredient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update ingredient quantity
+      tags:
+      - Grocery
   /meal-plans:
     post:
       consumes:
