@@ -67,7 +67,10 @@ func (s *MealPlanService) UpdateMealPlan(id int, updatedMealPlan models.MealPlan
 	mealPlan.Description = updatedMealPlan.Description
 	mealPlan.Name = updatedMealPlan.Name
 	mealPlan.Duration = updatedMealPlan.Duration
-	mealPlan.Meals = updatedMealPlan.Meals
+	mealPlan.Breakfast = updatedMealPlan.Breakfast
+	mealPlan.Lunch = updatedMealPlan.Lunch
+	mealPlan.Dinner = updatedMealPlan.Dinner
+	mealPlan.Snack = updatedMealPlan.Snack
 
 	res, err := s.repository.UpdateMealPlan(id, mealPlan)
 

@@ -10,6 +10,9 @@ type MealPlan struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Duration    int    `json:"duration"`
-	Meals       string `json:"meals"`
+	Breakfast   string `json:"breakfast"`
+	Lunch       string `json:"lunch"`
+	Dinner      string `json:"dinner"`
+	Snack       string `json:"snack"`
 	Username    string `json:"username"`
 }
