@@ -91,3 +91,13 @@ func (s *MealPlanService) DeleteMealPlan(id int) error {
 
 	return nil
 }
+
+func (s *MealPlanService) GetMealPlanByUsernameAndDatePlan(username string, datePlan string) (models.MealPlan, error) {
+	res, err := s.repository.GetMealPlanByUsernameAndDatePlan(username, datePlan)
+
+	if err != nil {
+		return res, errors.NewMealPlanNotFoundError(0)
+	}
+
+	return res, nil
+}

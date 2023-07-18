@@ -75,3 +75,13 @@ func (r *MealPlanRepository) DeleteMealPlan(id int) error {
 	}
 	return nil
 }
+
+func (r *MealPlanRepository) GetMealPlanByUsernameAndDatePlan(username string, datePlan string) (models.MealPlan, error) {
+	var mealPlan models.MealPlan
+	res := r.db.Where("username = ? AND Date(date_plan) = ?", username, datePlan).Find(&mealPlan)
+	if res.Error != nil {
+		return models.MealPlan{}, errors.NewMealPlanNotFoundError(0)
+	}
+
+	return mealPlan, nil
+}

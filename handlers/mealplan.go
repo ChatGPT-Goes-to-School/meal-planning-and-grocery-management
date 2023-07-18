@@ -162,3 +162,16 @@ func (h *MealPlanHandler) DeleteMealPlan(c *gin.Context) {
 
 	c.Status(http.StatusOK)
 }
+
+func (h *MealPlanHandler) GetMealPlanByUsernameAndDatePlan(c *gin.Context) {
+	username := c.Param("username")
+	datePlan := c.Param("datePlan")
+
+	mealPlan, err := h.service.GetMealPlanByUsernameAndDatePlan(username, datePlan)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, mealPlan)
+}
